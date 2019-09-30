@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.klapnp</groupId>
-	<artifactId>core</artifactId>
+	<artifactId>klapnp-core</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>core</name>
+	<name>klapnp-core</name>
 	<description>Core project of the klapnp platform</description>
 
 	<properties>
