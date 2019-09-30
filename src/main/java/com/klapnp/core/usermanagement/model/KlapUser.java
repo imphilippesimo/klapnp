@@ -1,4 +1,4 @@
-package com.klapnp.core.user.model;
+package com.klapnp.core.usermanagement.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.klapnp.core.util.Constants;
@@ -11,12 +11,10 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
-public class User implements Serializable {
+public class KlapUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,6 +26,9 @@ public class User implements Serializable {
 
     @Column(name = "birthdate")
     private Instant birthdate;
+
+    @Column(name = "ccreatedDate")
+    private Instant createdDate;
 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
@@ -85,15 +86,8 @@ public class User implements Serializable {
     @Column(name = "reset_date")
     private Instant resetDate = null;
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "user_authority",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
+    private String role;
 
-    @BatchSize(size = 20)
-    private Set<Authority> authorities = new HashSet<>();
 
 
 
@@ -226,12 +220,20 @@ public class User implements Serializable {
         this.resetDate = resetDate;
     }
 
-    public Set<Authority> getAuthorities() {
-        return authorities;
+    public String getRole() {
+        return role;
     }
 
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
     }
 
     @Override
@@ -243,8 +245,8 @@ public class User implements Serializable {
             return false;
         }
 
-        User user = (User) o;
-        return !(user.getId() == null || getId() == null) && Objects.equals(getId(), user.getId());
+        KlapUser klapUser = (KlapUser) o;
+        return !(klapUser.getId() == null || getId() == null) && Objects.equals(getId(), klapUser.getId());
     }
 
     @Override
@@ -254,7 +256,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "KlapUser{" +
                 "phoneNumber='" + phoneNumber + '\'' +
                 ", birthdate=" + birthdate +
                 ", login='" + login + '\'' +

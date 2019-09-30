@@ -1,4 +1,4 @@
-package com.klapnp.core.user.model;
+package com.klapnp.core.usermanagement.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
