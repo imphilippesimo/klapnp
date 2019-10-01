@@ -25,4 +25,5 @@ public interface UserRepository extends JpaRepository<KlapUser, Long> {
 
     Page<KlapUser> findAllByLoginNot(Pageable pageable, String login);
 
+    Optional<KlapUser> findOneByPhoneNumber(String phoneNumber);
 }

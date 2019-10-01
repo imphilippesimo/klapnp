@@ -12,6 +12,12 @@ import com.klapnp.core.util.errors.LoginAlreadyUsedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +26,7 @@ import java.util.*;
 
 @Service
 @Transactional
-public class UserService implements IUserService {
+public class UserService implements IUserService, UserDetailsService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
@@ -78,10 +84,7 @@ public class UserService implements IUserService {
                 .findById(userDTO.getId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .map(user -> {
-                    return userDTOMapper.UserToUserDTO(user);
-                });
-
+                .map(user -> userDTOMapper.UserToUserDTO(user));
     }
 
     @Override
@@ -106,5 +109,23 @@ public class UserService implements IUserService {
         userRepository.delete(existingUser);
         userRepository.flush();
         return true;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String userNameOrEmailOrPhone) throws UsernameNotFoundException {
+        Optional<KlapUser> foundByLogin = userRepository.findOneByLogin(userNameOrEmailOrPhone);
+        Optional<KlapUser> foundByEmail = userRepository.findOneByEmailIgnoreCase(userNameOrEmailOrPhone);
+        Optional<KlapUser> foundByPhoneNumber = userRepository.findOneByPhoneNumber(userNameOrEmailOrPhone);
+        if (foundByLogin.isPresent() || foundByEmail.isPresent() || foundByPhoneNumber.isPresent()) {
+            return getSpringUser(foundByLogin.get());
+        } else {
+            // If user not found. Throw this exception.
+            throw new UsernameNotFoundException("User with info: " + userNameOrEmailOrPhone + " not found");
+        }
+    }
+
+    private User getSpringUser(KlapUser foundUser) {
+        List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(foundUser.getRole());
+        return new User(foundUser.getLogin(), foundUser.getPassword(), grantedAuthorities);
     }
 }

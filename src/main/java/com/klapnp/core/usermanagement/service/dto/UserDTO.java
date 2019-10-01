@@ -24,6 +24,18 @@ public class UserDTO {
     @Size(max = 50)
     private String lastName;
 
+    private String phoneNumber;
+
+    private String selfDescription;
+
+    private String activationKey;
+
+
+    private String resetKey;
+
+
+    private Instant resetDate;
+
     @Email
     @Size(min = 5, max = 254)
     private String email;
@@ -34,7 +46,48 @@ public class UserDTO {
 
     private Set<String> roles;
 
+
     public UserDTO() {
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getSelfDescription() {
+        return selfDescription;
+    }
+
+    public void setSelfDescription(String selfDescription) {
+        this.selfDescription = selfDescription;
+    }
+
+    public String getActivationKey() {
+        return activationKey;
+    }
+
+    public void setActivationKey(String activationKey) {
+        this.activationKey = activationKey;
+    }
+
+    public String getResetKey() {
+        return resetKey;
+    }
+
+    public void setResetKey(String resetKey) {
+        this.resetKey = resetKey;
+    }
+
+    public Instant getResetDate() {
+        return resetDate;
+    }
+
+    public void setResetDate(Instant resetDate) {
+        this.resetDate = resetDate;
     }
 
     public Long getId() {
@@ -108,6 +161,11 @@ public class UserDTO {
                 ", login='" + login + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", selfDescription='" + selfDescription + '\'' +
+                ", activationKey='" + activationKey + '\'' +
+                ", resetKey='" + resetKey + '\'' +
+                ", resetDate=" + resetDate +
                 ", email='" + email + '\'' +
                 ", activated=" + activated +
                 ", createdDate=" + createdDate +
