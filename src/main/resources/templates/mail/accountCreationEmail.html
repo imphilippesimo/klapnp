@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="#{email.creation.title}">Klapnp account creation</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
+        <p th:text="#{email.creation.greeting(${user.login})}">
+            Dear
+        </p>
+        <p th:text="#{email.creation.content}">
+            Your account has been created, please click on the URL below to access it:
+        </p>
+        <p>
+            <a th:with="url=(@{|${baseUrl}/#/reset/finish?key=${user.resetKey}|})" th:href="${url}"
+            th:text="${url}">Login link</a>
+        </p>
+        <p>
+            <span th:text="#{klav.email.activation.text6}">Regards, </span>
+            <br/>
+            <em th:text="#{klav.email.signature1}">JHipster.</em>
+            <em th:text="#{klav.email.signature2}"></em>
+        </p>
+    </body>
+</html>
